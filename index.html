@@ -9,51 +9,43 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Operacional">
   
-  <link rel="apple-touch-icon" href="https://i.postimg.cc/W42PzFtr/logo.jpg">
-  <link rel="icon" href="https://i.postimg.cc/W42PzFtr/logo.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp">
+  <link rel="icon" type="image/webp" sizes="192x192" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp">
+  <link rel="icon" type="image/webp" sizes="512x512" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp">
+  <link rel="shortcut icon" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp" type="image/webp">
   
   <link rel="manifest" href="manifest.json">
 
   <title>Sistema Operacional Nater</title>
 
   <style>
-    /* Estilos da Página Principal */
     html, body {
       margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #f4f7f6;
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     iframe {
       width: 100%; height: 100%; border: none; display: block;
-      opacity: 0; transition: opacity 0.5s ease-in-out; /* Começa invisível e aparece suavemente */
+      opacity: 0; transition: opacity 0.5s ease-in-out;
     }
 
-    /* ----------------------------------------------------------- */
-    /* Estilos da Tela de Carregamento (Loading) */
-    /* ----------------------------------------------------------- */
+    /* Tela de Carregamento (Loading) */
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-color: #f4f7f6; display: flex; flex-direction: column;
       align-items: center; justify-content: center; z-index: 9999;
       transition: opacity 0.5s ease-out, visibility 0.5s;
     }
-    
-    /* Quando o sistema carregar, essa classe vai esconder o loading */
     #loading-screen.fade-out {
       opacity: 0; visibility: hidden;
     }
-
-    /* Contêiner do conteúdo centralizado */
     .loading-content {
       text-align: center; width: 80%; max-width: 300px;
     }
-
-    /* Logo da Nater arredondada */
     .loading-logo {
-      width: 90px; height: 90px; border-radius: 20px;
+      width: 100px; height: 100px; border-radius: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 25px;
+      object-fit: contain; background: white; padding: 5px;
     }
-
-    /* Frase animada: "Iniciando sistema..." */
     .loading-text {
       color: #004129; font-size: 16px; font-weight: 600; margin-bottom: 15px;
     }
@@ -61,44 +53,30 @@
       content: '...'; display: inline-block; width: 0;
       animation: dots 1.5s steps(4, end) infinite; vertical-align: bottom;
     }
-
-    /* Barra de Carregamento Externa (O trilho) */
     .progress-container {
       width: 100%; height: 10px; background-color: #e0e0e0;
       border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
       margin-bottom: 8px;
     }
-
-    /* Barra de Carregamento Interna (O preenchimento que se move) */
     .progress-bar {
       height: 100%; background: linear-gradient(90deg, #2b8e28, #4cd137);
-      width: 0%; /* Começa zerada */
-      border-radius: 10px; transition: width 0.4s ease-out; /* Movimento suave */
+      width: 0%; border-radius: 10px; transition: width 0.4s ease-out;
     }
-
-    /* Texto da porcentagem (%) */
     .progress-percentage {
       color: #555; font-size: 13px; font-weight: 400;
     }
-
-    /* Animação dos pontinhos (...) */
-    @keyframes dots {
-      to { width: 1.25em; }
-    }
+    @keyframes dots { to { width: 1.25em; } }
   </style>
 </head>
 <body>
 
   <div id="loading-screen">
     <div class="loading-content">
-      <img src="https://i.postimg.cc/W42PzFtr/logo.jpg" alt="Nater Logo" class="loading-logo">
-      
+      <img src="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp" alt="Nater Logo" class="loading-logo">
       <div class="loading-text">Iniciando sistema</div>
-      
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
       </div>
-      
       <div class="progress-percentage" id="progress-percentage">0%</div>
     </div>
   </div>
@@ -106,59 +84,34 @@
   <iframe id="system-iframe" src="https://script.google.com/a/macros/nater.coop.br/s/AKfycbybMiwLqhMGesjWzP-N33oWORL-i4Ve3ZdJb5T6-ta9cFfxJhIXAWhd93Ghzl-tWEPL/exec"></iframe>
 
   <script>
-    // -----------------------------------------------------------
-    // Lógica da Barra de Carregamento
-    // -----------------------------------------------------------
     const progressBar = document.getElementById('progress-bar');
     const progressPercentage = document.getElementById('progress-percentage');
     const loadingScreen = document.getElementById('loading-screen');
     const systemIframe = document.getElementById('system-iframe');
-    
     let currentPercent = 0;
 
-    // Função que move a barra até um certo ponto
     function updateProgress(targetPercent, duration) {
       const startPercent = currentPercent;
       const startTime = performance.now();
-
       function animate(currentTime) {
         const elapsedTime = currentTime - startTime;
-        const progress = Math.min(elapsedTime / duration, 1); // Garante que não passe de 100%
-        
-        // Interpolação suave do valor
+        const progress = Math.min(elapsedTime / duration, 1);
         currentPercent = startPercent + (targetPercent - startPercent) * progress;
-        
-        // Atualiza o visual da barra e o texto
         const displayPercent = Math.round(currentPercent);
         progressBar.style.width = displayPercent + '%';
         progressPercentage.innerText = displayPercent + '%';
-
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
+        if (progress < 1) requestAnimationFrame(animate);
       }
       requestAnimationFrame(animate);
     }
 
-    // --- CRONOGRAMA DE ANIMAÇÃO (Fake Progress para disfarçar o Cold Start) ---
-    
-    // 1. Instante 0: Salto rápido inicial (Carregando interface do GitHub)
     setTimeout(() => updateProgress(25, 400), 50);
+    setTimeout(() => updateProgress(65, 2500), 1500);
+    setTimeout(() => updateProgress(95, 6000), 5000);
 
-    // 2. Após 1.5s: Movimento lento (Buscando servidores do Google...)
-    setTimeout(() => updateProgress(60, 2500), 1500);
-
-    // 3. Após 5s: Movimento quase parado (Redirecionamentos internos do Google...)
-    setTimeout(() => updateProgress(95, 6000), 5000); // Fica preso em 95% até o fim real
-
-    // --- FIM REAL: Quando o Google terminar de carregar o sistema ---
     systemIframe.onload = function() {
-      // 1. Completa a barra para 100% instantaneamente
       updateProgress(100, 200);
-      
-      // 2. Aguarda um milissegundo para o usuário ver o 100%
       setTimeout(() => {
-        // 3. Esconde a tela de loading e mostra o sistema
         loadingScreen.classList.add('fade-out');
         systemIframe.style.opacity = '1';
       }, 500);
