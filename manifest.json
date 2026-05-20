@@ -7,14 +7,14 @@
   "theme_color": "#2b8e28",
   "icons": [
     {
-      "src": "https://i.postimg.cc/W42PzFtr/logo.jpg",
+      "src": "https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/webp"
     },
     {
-      "src": "https://i.postimg.cc/W42PzFtr/logo.jpg",
+      "src": "https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/webp"
     }
   ]
 }
