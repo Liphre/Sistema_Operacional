@@ -116,6 +116,23 @@
         systemIframe.style.opacity = '1';
       }, 500);
     };
+
+        // 🕒 SISTEMA ANTI-CONGELAMENTO (WAKE UP REFRESH)
+    let tempoUltimoAcesso = Date.now();
+    
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'hidden') {
+        // Guarda o milissegundo exato em que a tela foi apagada ou o app foi minimizado
+        tempoUltimoAcesso = Date.now();
+      } else if (document.visibilityState === 'visible') {
+        // Se o app voltar para a tela após mais de 15 minutos (15 * 60 * 1000 ms)
+        if (Date.now() - tempoUltimoAcesso > 15 * 60 * 1000) { 
+          // Força um refresh limpo para reatar os nós com o Google e exibir o Loading
+          window.location.reload();
+        }
+      }
+    });
+    
   </script>
 
 </body>
