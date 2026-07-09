@@ -12,7 +12,6 @@
   <link rel="apple-touch-icon" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp">
   <link rel="icon" type="image/webp" sizes="192x192" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp">
   <link rel="icon" type="image/webp" sizes="512x512" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp">
-  <link rel="shortcut icon" href="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp" type="image/webp">
   
   <link rel="manifest" href="manifest.json">
 
@@ -23,68 +22,89 @@
       margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #f4f7f6;
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-    
-    /* Tela de Carregamento (Loading) */
+    iframe {
+      width: 100%; height: 100%; border: none; display: block;
+      opacity: 0; transition: opacity 0.5s ease-in-out;
+    }
+
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-color: #f4f7f6; display: flex; flex-direction: column;
       align-items: center; justify-content: center; z-index: 9999;
+      transition: opacity 0.5s ease-out, visibility 0.5s;
     }
-    .loading-content {
-      text-align: center; width: 80%; max-width: 300px;
-      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    @keyframes popIn {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+    #loading-screen.fade-out { opacity: 0; visibility: hidden; }
+    
+    .loading-content { text-align: center; width: 80%; max-width: 300px; }
     .loading-logo {
       width: 100px; height: 100px; border-radius: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 25px;
       object-fit: contain; background: white; padding: 5px;
     }
-    .loading-text {
-      color: #004129; font-size: 16px; font-weight: 600; margin-bottom: 15px;
-    }
-    .loading-text::after {
-      content: '...'; display: inline-block; width: 0;
-      animation: dots 1.5s steps(4, end) infinite; vertical-align: bottom;
-    }
+    .loading-text { color: #004129; font-size: 16px; font-weight: 600; margin-bottom: 15px; }
     .progress-container {
       width: 100%; height: 10px; background-color: #e0e0e0;
-      border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-      margin-bottom: 8px;
+      border-radius: 10px; overflow: hidden; margin-bottom: 8px;
     }
     .progress-bar {
       height: 100%; background: linear-gradient(90deg, #2b8e28, #4cd137);
-      width: 0%; border-radius: 10px; transition: width 1.5s ease-out;
+      width: 0%; border-radius: 10px; transition: width 0.4s ease-out;
     }
-    @keyframes dots { to { width: 1.25em; } }
+    
+    /* Botão de Fuga caso o navegador bloqueie o iframe */
+    #btn-fuga {
+      margin-top: 30px; display: none; background: #dc2626; color: white;
+      border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; animation: popIn 0.5s ease;
+    }
+    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
 
   <div id="loading-screen">
     <div class="loading-content">
-      <img src="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp" alt="Nater Logo" class="loading-logo">
-      <div class="loading-text">Conectando ao servidor seguro</div>
+      <img src="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp" class="loading-logo">
+      <div class="loading-text" id="loading-text">Iniciando sistema...</div>
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
       </div>
+      
+      <button id="btn-fuga" onclick="abrirModoSeguro()">Sistema demorando? Clique aqui</button>
     </div>
   </div>
 
-  <script>
-    // 1. Inicia a animação da barra
-    setTimeout(() => {
-      document.getElementById('progress-bar').style.width = '100%';
-    }, 100);
+  <iframe id="system-iframe" src="https://script.google.com/macros/s/AKfycbybMiwLqhMGesjWzP-N33oWORL-i4Ve3ZdJb5T6-ta9cFfxJhIXAWhd93Ghzl-tWEPL/exec" allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"></iframe>
 
-    // 2. Redireciona a página inteira para o link OFICIAL do Google após 1.5 segundos
-    // Isso mata o iframe e salva a memória RAM do computador/celular dos funcionários
-    setTimeout(() => {
+  <script>
+    const progressBar = document.getElementById('progress-bar');
+    const loadingScreen = document.getElementById('loading-screen');
+    const systemIframe = document.getElementById('system-iframe');
+    const btnFuga = document.getElementById('btn-fuga');
+
+    // Barra de progresso visual
+    setTimeout(() => progressBar.style.width = '30%', 100);
+    setTimeout(() => progressBar.style.width = '60%', 2000);
+    
+    // Se o iframe não responder em 6 segundos, o Chrome provavelmente bloqueou os cookies
+    let timeoutFuga = setTimeout(() => {
+      btnFuga.style.display = "block";
+      document.getElementById('loading-text').innerText = "O navegador bloqueou o acesso...";
+    }, 6000);
+
+    // Quando o Google Apps Script carregar com sucesso
+    systemIframe.onload = function() {
+      clearTimeout(timeoutFuga); // Cancela o botão de fuga
+      progressBar.style.width = '100%';
+      setTimeout(() => {
+        loadingScreen.classList.add('fade-out');
+        systemIframe.style.opacity = '1';
+      }, 500);
+    };
+
+    function abrirModoSeguro() {
       window.location.replace("https://script.google.com/macros/s/AKfycbybMiwLqhMGesjWzP-N33oWORL-i4Ve3ZdJb5T6-ta9cFfxJhIXAWhd93Ghzl-tWEPL/exec");
-    }, 1500);
+    }
   </script>
 
 </body>
