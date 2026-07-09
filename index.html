@@ -23,23 +23,20 @@
       margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #f4f7f6;
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-    iframe {
-      width: 100%; height: 100%; border: none; display: block;
-      opacity: 0; transition: opacity 0.5s ease-in-out;
-    }
-
+    
     /* Tela de Carregamento (Loading) */
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-color: #f4f7f6; display: flex; flex-direction: column;
       align-items: center; justify-content: center; z-index: 9999;
-      transition: opacity 0.5s ease-out, visibility 0.5s;
-    }
-    #loading-screen.fade-out {
-      opacity: 0; visibility: hidden;
     }
     .loading-content {
       text-align: center; width: 80%; max-width: 300px;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
     .loading-logo {
       width: 100px; height: 100px; border-radius: 20px;
@@ -60,10 +57,7 @@
     }
     .progress-bar {
       height: 100%; background: linear-gradient(90deg, #2b8e28, #4cd137);
-      width: 0%; border-radius: 10px; transition: width 0.4s ease-out;
-    }
-    .progress-percentage {
-      color: #555; font-size: 13px; font-weight: 400;
+      width: 0%; border-radius: 10px; transition: width 1.5s ease-out;
     }
     @keyframes dots { to { width: 1.25em; } }
   </style>
@@ -73,66 +67,24 @@
   <div id="loading-screen">
     <div class="loading-content">
       <img src="https://storage.googleapis.com/ecdt-logo-saida/bceebc072cbd6fac8f85c47604bf2a98e0b1b552fc8d8fdeb78e889cd85805fe/NATER-COOP.webp" alt="Nater Logo" class="loading-logo">
-      <div class="loading-text">Iniciando sistema</div>
+      <div class="loading-text">Conectando ao servidor seguro</div>
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
       </div>
-      <div class="progress-percentage" id="progress-percentage">0%</div>
     </div>
   </div>
 
-  <iframe id="system-iframe" src="https://script.google.com/macros/s/AKfycbybMiwLqhMGesjWzP-N33oWORL-i4Ve3ZdJb5T6-ta9cFfxJhIXAWhd93Ghzl-tWEPL/exec"></iframe>
-
   <script>
-    const progressBar = document.getElementById('progress-bar');
-    const progressPercentage = document.getElementById('progress-percentage');
-    const loadingScreen = document.getElementById('loading-screen');
-    const systemIframe = document.getElementById('system-iframe');
-    let currentPercent = 0;
+    // 1. Inicia a animação da barra
+    setTimeout(() => {
+      document.getElementById('progress-bar').style.width = '100%';
+    }, 100);
 
-    function updateProgress(targetPercent, duration) {
-      const startPercent = currentPercent;
-      const startTime = performance.now();
-      function animate(currentTime) {
-        const elapsedTime = currentTime - startTime;
-        const progress = Math.min(elapsedTime / duration, 1);
-        currentPercent = startPercent + (targetPercent - startPercent) * progress;
-        const displayPercent = Math.round(currentPercent);
-        progressBar.style.width = displayPercent + '%';
-        progressPercentage.innerText = displayPercent + '%';
-        if (progress < 1) requestAnimationFrame(animate);
-      }
-      requestAnimationFrame(animate);
-    }
-
-    setTimeout(() => updateProgress(25, 400), 50);
-    setTimeout(() => updateProgress(65, 2500), 1500);
-    setTimeout(() => updateProgress(95, 6000), 5000);
-
-    systemIframe.onload = function() {
-      updateProgress(100, 200);
-      setTimeout(() => {
-        loadingScreen.classList.add('fade-out');
-        systemIframe.style.opacity = '1';
-      }, 500);
-    };
-
-        // 🕒 SISTEMA ANTI-CONGELAMENTO (WAKE UP REFRESH)
-    let tempoUltimoAcesso = Date.now();
-    
-    document.addEventListener('visibilitychange', function() {
-      if (document.visibilityState === 'hidden') {
-        // Guarda o milissegundo exato em que a tela foi apagada ou o app foi minimizado
-        tempoUltimoAcesso = Date.now();
-      } else if (document.visibilityState === 'visible') {
-        // Se o app voltar para a tela após mais de 15 minutos (15 * 60 * 1000 ms)
-        if (Date.now() - tempoUltimoAcesso > 15 * 60 * 1000) { 
-          // Força um refresh limpo para reatar os nós com o Google e exibir o Loading
-          window.location.reload();
-        }
-      }
-    });
-    
+    // 2. Redireciona a página inteira para o link OFICIAL do Google após 1.5 segundos
+    // Isso mata o iframe e salva a memória RAM do computador/celular dos funcionários
+    setTimeout(() => {
+      window.location.replace("https://script.google.com/macros/s/AKfycbybMiwLqhMGesjWzP-N33oWORL-i4Ve3ZdJb5T6-ta9cFfxJhIXAWhd93Ghzl-tWEPL/exec");
+    }, 1500);
   </script>
 
 </body>
